@@ -1,0 +1,13 @@
+# -*- mode:Sh; -*-
+# 2022-12-29T1125 LOLH
+
+# Sample code to be placed into the file
+# /etc/paths.d/Emacs
+# to add to the $PATH variable paths to the Emacs executable
+# and auxiliary executables, such as emacsclient.
+# This allows you to start the graphical application from the
+# command-line and take advantage of the command-line environment.
+
+$HOME/Applications/Emacs.app/Contents/MacOS/Emacs
+$HOME/Applications/Emacs.app/Contents/MacOS/Emacs/bin
+$HOME/Applications/Emacs.app/Contents/MacOS/Emacs/libexec

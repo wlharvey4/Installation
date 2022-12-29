@@ -1,0 +1,28 @@
+# -*- mode: Sh; -*-
+# 2022-12-29T1120 LOLH
+
+# Sample code to place into your shell init file, such as ~/.zshrc
+
+# Start the terminal server, called `termserver'
+if ! pgrep -qlf termserver
+then
+    emacs -nw --daemon=termserver
+fi
+
+# Start the graphical server, called `server' by default,
+# so long as the necessary code has been placed into ~/.init.el.
+if ! pgrep -qf Emacs
+then
+    Emacs&
+fi
+
+# Two functions utilizing the same `emacsclient' file to start
+# either the graphical server `server' or the terminal server
+# `termserver'
+ecg () {
+    emacsclient -s server "$@"
+}
+
+ect () {
+    emacsclient -s termserver "$@"
+}

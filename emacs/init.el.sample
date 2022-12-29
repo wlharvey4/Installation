@@ -1,0 +1,11 @@
+; -*- mode: Emacs-lisp; -*-
+; 2022-12-29T1120 LOLH
+
+;; Sample code to place into your ~/.init.el file to start the graphical server,
+;; called `server' by default, the first time Emacs.app is started.
+
+(require 'server)
+(when (display-graphic-p)
+  (unless (server-running-p)
+    (server-start)
+    (message "Graphical server started.")))
