@@ -1,6 +1,5 @@
 # -*- mode: Make; -*-
-
-# 2022-12-29T1500 LOLH
+# 2022-12-29T1530 LOLH
 
 CCL-GIT-URL := https://github.com/Clozure/ccl.git ccl-dev
 CCL-BINARIES := curl -L -O https://github.com/Clozure/ccl/releases/download/v1.12.1/darwinx86.tar.gz
@@ -17,26 +16,12 @@ CCL-BUILD-DIR := $(CCL-SRC-CCL)/lisp-kernel/darwinx8664
 
 CCL-EXE := $(CCL-SRC-CCL)/dx86cl64
 CCL-BOOT-IMAGE := $(CCL-SRC-CCL)/x86-boot64.image
-
-#---------------------------------------------------------------------
-# ~/.zshrc:
-#==========
-# export CCL_DEFAULT_DIRECTORY=/usr/local/dev/ccl/src/ccl-dev/
-# export CCL_KERNEL=dx86cl64
-
-# /usr/local/bin/ccl:
-#====================
-# #! /bin/zsh
-# exec ${CCL_DEFAULT_DIRECTORY}/${CCL_KERNEL} "$@"
-#---------------------------------------------------------------------
-
-all: install-ccl
-
-install-ccl: ccl
-	cd $CCL-BUILD-DIR); \
-	sudo make install;
+BIN-CCL := /usr/local/bin/ccl
 
 ccl: $(CCL-BOOT-IMAGE)
+
+# this will probably require sudo
+install: ccl $(BIN-CCL)
 
 ccl-exe: | $(CCL-EXE)
 
@@ -51,6 +36,12 @@ ccl-dir: | $(CCL-DIR)
 ccl-src-dir: | ccl-dir $(CCL-SRC-DIR)
 
 ccl-git-dir: | ccl-src-dir $(CCL-GIT-DIR)
+
+$(BIN-CCL):
+	touch $(BIN-CCL)
+	echo "#! /bin/zsh" >> $(BIN-CCL); \
+	echo "exec $(CCL-EXE)" >> $(BIN-CCL); \
+	chmod +x /usr/local/bin/ccl; \
 
 $(CCL-BOOT-IMAGE): | ccl-exe
 	rm -rf ~/.cache/common-lisp;
@@ -80,5 +71,4 @@ $(CCL-DIR):
 clean-all:
 	rm -rf $(CCL-DIR)
 
-PHONEY: all install-ccl ccl ccle-exe clone-git update-git ccl-dir ccl-src-dir ccl-git-dir
-PHONEY: clean-all
+PHONEY: install-ccl ccl ccle-exe clone-git update-git ccl-dir ccl-src-dir ccl-git-dir clean-all
