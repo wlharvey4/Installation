@@ -1,5 +1,3 @@
-# -*- mode: Text; -*-
-
 # Emacs Makefile
 ## Install Emacs in ~/Applications/Emacs.app from the Git source
 ### About
