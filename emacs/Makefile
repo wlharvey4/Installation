@@ -1,5 +1,5 @@
 # Install Emacs from Git Source
-# 2022-12-29T1100 LOLH
+# 2022-12-29T1105 LOLH
 #
 # The  target `install-emacs-app`  clones the  Git source,  builds the
 # NextStep    version    of    Emacs     and    installs    it    into
@@ -20,22 +20,24 @@
 #
 # you can  then start  Emacs.app by entering  the command
 #
-# $ Emacs
+# $ Emacs&
+# or
+# $ Eamcs <file>&
 #
 # (or  `emacs'  on  a  system   without  case  recognition)  from  the
 # command-line.  You can  also start a terminal emacs  by entering the
 # command
 #
-# $ emacs -nw.
+# $ emacs -nw <file>.
 #
-# There  is  also  a  target   `install-emacs`  that  will  install  a
-# non-NextStep version in /usr/local but  this will interfere with the
-# above setup because there is now  ambiguity as to which file to run,
-# emacs or Emacs,  so only one or the other  should be used.  However,
-# if your system is case-sensitive, then this should work to have both
-# installed.
+# Note that there is also a target `install-emacs' that will install a
+# non-NextStep version  in `/usr/local'  but this will  interfere with
+# the above setup  because there is now ambiguity as  to which file to
+# run, `emacs' or  `Emacs', so only one target or  the other should be
+# used.  (However, if your system  is case-sensitive, then this should
+# work to have both installed.)
 
-# Next, add the following code to your `init.el` to start the Emacs.app
+# Next, add the following code to your `init.el' to start the Emacs.app
 # server the first time Emacs.app is started:
 
 # (require 'server)
@@ -43,23 +45,22 @@
 #   (unless (server-running-p)
 #      (server-start)))
 
-# If  you  wish  to  have  two  Emacs  servers  running,  one  in  the
-# applicaiton and one in the terminal, create a terminal server.  Here
+# If you wish to have two  Emacs servers running, one in the graphical
+# application and one in the terminal, create a terminal server.  Here
 # is one suggested method.
 
 # Add the  following code to  your `~/.zshrc`  init file to  start the
 # terminal  server when  the  terminal  is booted.   It  checks for  a
-# running process that includes the server name.
+# running process that includes the server name `termserver'.
 
 # if ! pgrep -qlf termserver
 # then
-#   this server is started from the command-line and is called `termserver'
 #   emacs -nw --daemon=termserver
 # fi
 
 # This code  will start the  Emacs.app program from  the command-line,
 # but is  not necessary if  you wish to  start the app  manually.  The
-# default name of the server is `server'.
+# default name of the created server is `server'.
 
 # if ! pgrep -qf Emacs
 # then
@@ -67,7 +68,7 @@
 # fi
 
 # Finally, add the following shell functions to utilize the respective
-# emacsclient files:
+# emacsclient servers:
 
 # ecg () {
 #         emacsclient -s server "$@"
