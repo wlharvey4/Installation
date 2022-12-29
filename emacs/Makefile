@@ -1,5 +1,5 @@
 # Install Emacs from Git Source
-# 2022-12-29T1105 LOLH
+# 2022-12-29T1110 LOLH
 #
 # The  target `install-emacs-app`  clones the  Git source,  builds the
 # NextStep    version    of    Emacs     and    installs    it    into
@@ -16,13 +16,14 @@
 # - $HOME/Applications/Emacs.app/Contents/MacOS/Emacs/bin,
 # - $HOME/Applications/Emacs.app/Contents/MacOS/Emacs/libexec
 #
-# in /etc/paths.d/Emacs,
+# in  /etc/paths.d/Emacs,  (you need  to  make  these absolute  paths,
+# however)
 #
 # you can  then start  Emacs.app by entering  the command
 #
 # $ Emacs&
 # or
-# $ Eamcs <file>&
+# $ Emacs <file>&
 #
 # (or  `emacs'  on  a  system   without  case  recognition)  from  the
 # command-line.  You can  also start a terminal emacs  by entering the
