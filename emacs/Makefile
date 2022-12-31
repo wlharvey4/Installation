@@ -1,10 +1,16 @@
 # Install Emacs from Git Source
-# 2022-12-29T1110 LOLH
+#
+# Installation/emacs/Makefile
+# Time-stamp: <2022-12-30 18:37:34 minilolh3>
 #
 # The  target `install-emacs-app`  clones the  Git source,  builds the
 # NextStep    version    of    Emacs     and    installs    it    into
 # $HOME/Applications/Emacs.app via  a symlink.   The prior  version of
-# ~/Applications/Emacs.app is overwritten.
+# ~/Applications/Emacs.app is  overwritten.  If you want,  you can add
+# (or replace)  the ~/.emacs.d/init.el file  with a template  found in
+# this  repository  using  the  target  `replace-init`.   Any  current
+# `init.el` is  saved as  a versioned backup  in the  hidden directory
+# `.~` prior to being replaced.
 
 #---------------------------------------------------------------------
 # Here are  some suggestions  on setting  up your  system to  use this
@@ -98,6 +104,8 @@ CONFIGURE-OPTIONS := --without-ns --disable-ns-self-contained
 SYMLINK-EMACS-APP := ln -fs $(EMACS-APP-BUILD-DIR)/nextstep/Emacs.app $$HOME/Applications
 # use parallel processing in make -j#
 NCPU := -j$(getconf _NPROCESSORS_ONLN)
+EMACS-INIT-INPROGRESS := ./init.el.in-progress
+EMACS-INIT := $(EMACS-DIR)/init.el
 
 all: install-emacs-app
 
@@ -147,6 +155,20 @@ $(EMACS-APP-BUILD-DIR):
 
 $(EMACS-BUILD-DIR):
 	mkdir $(EMACS-BUILD-DIR)
+
+# This loads init.el, sets the time-stamp, and immediately saves it,
+# thereby creating a numbered (versioned) backup in the subdirectory .~
+# before replacing it with the template.
+replace-init:
+	emacs -nw -Q --batch \
+	--eval '(save-current-buffer \
+			(find-file-literally (locate-user-emacs-file "init.el")) \
+			(setf backup-by-copying t version-control t \
+			 backup-directory-alist (quote (("init.el" . ".~")))) \
+			(time-stamp) \
+			(save-buffer 64))'
+	cp -f $(EMACS-INIT-INPROGRESS) $(EMACS-INIT)
+	sed -i '' -e 's/.in-progress/ from template/' $(EMACS-INIT)
 
 clean:
 	rm -rf $(EMACS-DIR)

@@ -91,3 +91,11 @@ ect () {
 
 Now running `ecg <file>` will load the file into the Emacs.app server,
 while `ect file` will load the file into the emacs -nw server.
+
+## The Emacs Configuration File
+
+There     is      a     template      `~/.emacs.d/init.el`     (called
+`init.el.in-progress`) in this reposity that  can be used.  Invoke the
+make target  `replace-init` to  add it  to `~/.emacs.d`.   Any current
+`init.el` will first  be version backed-up in  the hidden subdirectory
+`~/.emacs.d/.~` prior to being replaced.
