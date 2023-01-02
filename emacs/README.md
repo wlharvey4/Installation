@@ -99,3 +99,8 @@ There     is      a     template      `~/.emacs.d/init.el`     (called
 make target  `replace-init` to  add it  to `~/.emacs.d`.   Any current
 `init.el` will first  be version backed-up in  the hidden subdirectory
 `~/.emacs.d/.~` prior to being replaced.
+
+# SLIME
+
+This Makefile will also install SLIME alongside Emacs.  Use the target
+- `slime-clone`

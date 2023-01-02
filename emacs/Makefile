@@ -1,7 +1,7 @@
 # Install Emacs from Git Source
 #
 # Installation/emacs/Makefile
-# Time-stamp: <2022-12-30 18:37:34 minilolh3>
+# Time-stamp: <2023-01-01 19:19:05 minilolh3>
 #
 # The  target `install-emacs-app`  clones the  Git source,  builds the
 # NextStep    version    of    Emacs     and    installs    it    into
@@ -11,6 +11,8 @@
 # this  repository  using  the  target  `replace-init`.   Any  current
 # `init.el` is  saved as  a versioned backup  in the  hidden directory
 # `.~` prior to being replaced.
+#
+# Also clone SLIME while we're at it.
 
 #---------------------------------------------------------------------
 # Here are  some suggestions  on setting  up your  system to  use this
@@ -107,7 +109,12 @@ NCPU := -j$(getconf _NPROCESSORS_ONLN)
 EMACS-INIT-INPROGRESS := ./init.el.in-progress
 EMACS-INIT := $(EMACS-DIR)/init.el
 
-all: install-emacs-app
+SLIME-GIT-URL := https://github.com/slime/slime.git
+SLIME-SRC-DIR := $(EMACS-SRC-DIR)/slime
+SLIME-GIT-DIR := $(SLIME-SRC-DIR)/.git
+
+
+all: install-emacs-app slime-clone
 
 clone-git: | $(EMACS-GIT-DIR)
 
@@ -169,6 +176,20 @@ replace-init:
 			(save-buffer 64))'
 	cp -f $(EMACS-INIT-INPROGRESS) $(EMACS-INIT)
 	sed -i '' -e 's/.in-progress/ from template/' $(EMACS-INIT)
+
+#===================================================================================
+
+slime-clone: | $(SLIME-GIT-DIR)
+
+slime-update: slime-clone
+	cd $(SLIME-SRC-DIR); \
+	git pull
+
+$(SLIME-GIT-DIR): | $(EMACS-SRC-DIR)
+	cd $(EMACS-SRC-DIR); \
+	$(GIT-CLONE) $(GIT-CLONE-DEPTH) $(SLIME-GIT-URL)
+
+#===================================================================================
 
 clean:
 	rm -rf $(EMACS-DIR)
