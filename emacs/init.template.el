@@ -1,10 +1,9 @@
 ;;; -*- mode: emacs-lisp; -*-
 
 ;;; ~/.emacs.d/init.el
-;;; Time-stamp: <2023-01-01 19:17:39 minilolh3>
+;;; Time-stamp: <2023-01-02 10:28:18 minilolh3>
 
-(defconst +INIT-FILE+  (expand-file-name
-			(locate-user-emacs-file "init.el"))
+(defconst +INIT-FILE+  (expand-file-name (locate-user-emacs-file "init.el"))
   "The location of this file.")
 
 ;;; Initial Frame setup and Global features
@@ -23,6 +22,13 @@
 (display-time)
 (add-hook 'before-save-hook 'time-stamp)
 (global-display-line-numbers-mode)
+
+;;; Backup Configuration
+(setf make-backup-files t
+      backup-by-copying t
+      version-control t
+      delete-old-versions 'never
+      backup-directory-alist '(("init.*.el" . "./.~/")))
 
 
 ;;; Packages
@@ -61,15 +67,14 @@
 
 
 ;;; Slime
-;; TODO: Utilize ENVIRONMENT VARIABLES instead of hard-coding all of these in.
 (add-to-list 'load-path
 	     (expand-file-name
 	      (file-name-concat user-emacs-directory "src/slime")))
 (require 'slime-autoloads)
-(setq inferior-lisp-program "/usr/local/bin/sbcl")
+(setq inferior-lisp-program "${SBCL_EXE}")
 (setq slime-lisp-implementations
-      '((sbcl ("/usr/local/bin/sbcl" "--noinform") :coding-system utf-8-unix)
-	(ccl ("/usr/local/ccl/ccl-1.12/ccl-1.12.1/dx86cl64"))
+      '((sbcl ("${SBCL_EXE}" "--noinform") :coding-system utf-8-unix)
+	(ccl ("${CCL_EXE}"))
         (clisp ("/opt/local/bin/clisp"))))
 (slime-setup  '(slime-repl slime-asdf slime-fancy slime-banner))
 
@@ -111,14 +116,6 @@
 ;;; CLHS Use Local
 (load "/usr/local/quicklisp/quicklisp/clhs-use-local.el" t)
 ;; Use C-c C-d h make-instance RET to test if the change was successful.
-
-;;; Backup Configuration
-(setf make-backup-files t
-      backup-by-copying t
-      version-control t
-      delete-old-versions 'never
-      backup-directory-alist '(("init.*.el" . "./.~/")))
-
 
 ;;; INIT-FILE Functions
 (defun init-open ()
@@ -164,6 +161,9 @@ Currently it will be saved as:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages '(paredit geiser-guile geiser))
+ '(safe-local-variable-values
+   '((backup-directory-alist
+      (".*.zsh" . "./.~/"))))
  )
 
 (custom-set-faces
